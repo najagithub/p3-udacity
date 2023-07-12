@@ -10,9 +10,10 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run:
-          name : install frontend
+          name: install frontend
+          chdir: frontend/
           command: |
-            cd ~/p3-udacity/frontend
+            chdir=/opt/tools/temp
             npm install
             npm run build
 
