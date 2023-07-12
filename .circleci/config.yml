@@ -10,15 +10,17 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: install frontend
           command: |
             cd ~/project/frontend
             npm install
             npm run build
-      - persist_to_workspace:
-          root: ~/project/frontend
-          paths: .
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
