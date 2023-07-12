@@ -11,8 +11,8 @@ jobs:
     steps:
       - run:
           name: install frontend
-          chdir: frontend/
           command: |
+            cd ~/project/backend
             npm install
             npm run build
 
