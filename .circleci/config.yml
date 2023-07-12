@@ -11,9 +11,8 @@ jobs:
     steps:
       - run:
           name: install frontend
-          chdir: frontend/
           command: |
-            chdir=/opt/tools/temp
+            cd /frontend/
             npm install
             npm run build
 
