@@ -46,15 +46,15 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-        name: Install dependencies
-        command: |
-          cd ~/project/frontend
-          npm install
+          name: Install dependencies
+          command: |
+            cd ~/project/frontend
+            npm install
       - run:
-        name: Run frontend unit tests
-        command: |
-          cd ~/project/frontend
-          npm run test
+          name: Run frontend unit tests
+          command: |
+            cd ~/project/frontend
+            npm run test
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
