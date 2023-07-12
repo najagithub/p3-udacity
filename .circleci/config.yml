@@ -93,6 +93,24 @@ jobs:
             cd ~/project/frontend
             npm install
             npm audit --audit-level=critical
+  scan-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/project/backend
+            npm install
+      - run:
+          name: run audit test
+          command: |
+            cd ~/project/backend
+            npm install
+            npm audit --audit-level=critical
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -107,3 +125,5 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
