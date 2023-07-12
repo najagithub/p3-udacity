@@ -75,6 +75,24 @@ jobs:
           command: |
             cd ~/project/backend
             npm run test
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/project/frontend
+            npm install
+      - run:
+          name: run audit test
+          command: |
+            cd ~/project/frontend
+            npm install
+            npm audit --audit-level=critical
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -84,4 +102,8 @@ workflows:
       - build-frontend
       - build-backend
       - test-frontend
+          requires: [build-frontend]
       - test-backend
+          reauires: [build-backend]
+      - scan-frontend
+          reauires: [build-frontend]
