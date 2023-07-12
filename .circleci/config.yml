@@ -21,6 +21,22 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: install backend
+          command: |
+            cd ~/project/backend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -28,3 +44,4 @@ workflows:
   default:
     jobs:
       - build-frontend
+      - build-backend
