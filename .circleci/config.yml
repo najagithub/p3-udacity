@@ -92,7 +92,8 @@ jobs:
           command: |
             cd ~/project/frontend
             npm install
-            npm audit fix --audit-level=critical --force
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
   scan-backend:
     docker:
@@ -111,7 +112,8 @@ jobs:
           command: |
             cd ~/project/backend
             npm install
-            npm audit fix --audit-level=critical --force
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
 
 # Orchestrate jobs using workflows
