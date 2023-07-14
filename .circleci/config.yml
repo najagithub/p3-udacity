@@ -325,7 +325,7 @@ jobs:
             npm run build
             tar -czf artifact.tar.gz dist/* package*
             mv artifact.tar.gz ../.circleci/ansible/roles/deploy/files/
-            cd ~/.circleci/ansible/roles/deploy/files/ && ls -ltrah > text.txt
+            cd ../.circleci/ansible/roles/deploy/files/ && ls -ltrah > text.txt
             cat text.txt
       
       # Here's where you will add some code to rollback on failure
