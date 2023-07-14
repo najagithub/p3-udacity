@@ -324,7 +324,7 @@ jobs:
             cd backend
             npm run build
             tar -czf artifact.tar.gz dist/* package*
-            mv artifact.tar.gz ../circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz ../.circleci/ansible/roles/deploy/files/
             cd ~/.circleci/ansible/roles/deploy/files/ && ls -ltrah > text.txt
             cat text.txt
       
