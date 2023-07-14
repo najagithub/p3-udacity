@@ -328,7 +328,8 @@ jobs:
             ## Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files
-
+            cd .circleci/ansible/roles/deploy/files && ls -ltrah > file.txt
+            cat file.txt
             cd .circleci/ansible
 
             echo "Contents  of the inventory.txt file is -------"
