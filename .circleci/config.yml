@@ -394,14 +394,43 @@ jobs:
             echo "OldWorkflowID: ${OldWorkflowID}" >> OldWorkflowID.txt
             echo "Current Workflow Id: ${CIRCLE_WORKFLOW_ID:0:7}" >> OldWorkflowID.txt
             cat OldWorkflowID.txt
+            curl https://kvdb.io/${KVDB_BUCKET}/oldworkflowid -d "${OldWorkflowID}"
 
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
-            --stack-name InitialStack-${OldWorkflowID} \
-            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
       - destroy-environment
       - revert-migrations 
+  cleanup:
+    docker:
+      # Docker image here
+      - image: cimg/python:3.10
+    steps:
+      # Checkout code from git
+      - checkout
+      - install_awscli
+      - run:
+          name: Get and remove old stack if exist workflow id
+          command: |
+            export STACKS=($(aws cloudformation list-stacks \
+            --query "StackSummaries[*].StackName" \
+            --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+            echo Stack names: "${STACKS[@]}"
+
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/oldworkflowid)
+            echo "Old Workflow ID: ${OldWorkflowID}"
+
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
+            then
+              echo "------------------------DELETE CONFIRMED------------------------"
+              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+            else
+              echo "------------------------Cannot Cleanup------------------------"
+            fi
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -435,3 +464,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
