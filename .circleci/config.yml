@@ -394,7 +394,7 @@ jobs:
             echo "OldWorkflowID: ${OldWorkflowID}" >> OldWorkflowID.txt
             echo "Current Workflow Id: ${CIRCLE_WORKFLOW_ID:0:7}" >> OldWorkflowID.txt
             cat OldWorkflowID.txt
-            curl https://kvdb.io/${KVDB_BUCKET}/oldworkflowid -d "${OldWorkflowID}"
+            curl https://kvdb.io/${KVDB_ID}/oldworkflowid -d "${OldWorkflowID}"
 
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
@@ -419,7 +419,7 @@ jobs:
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
 
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/oldworkflowid)
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_ID}/oldworkflowid)
             echo "Old Workflow ID: ${OldWorkflowID}"
 
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
