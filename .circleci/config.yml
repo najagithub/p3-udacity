@@ -405,7 +405,6 @@ jobs:
       - revert-migrations 
   cleanup:
     docker:
-      # Docker image here
       - image: cimg/python:3.10
     steps:
       # Checkout code from git
