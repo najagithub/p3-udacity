@@ -421,7 +421,7 @@ jobs:
             export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_ID}/oldworkflowid)
             echo "Old Workflow ID: ${OldWorkflowID}"
 
-            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               echo "------------------------DELETE CONFIRMED------------------------"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
