@@ -51,7 +51,6 @@ commands:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}   
     steps:
-      - checkout
       - run:
           name: Revert migrations
           # Add when this will run
@@ -62,6 +61,7 @@ commands:
             cd ~/project/backend-app && ls 
             cd ~/backend-app && ls 
             cd ~/backend && ls 
+            echo "resultat curl $(curl --insecure  https://kvdb.io/${KVDB_ID}/migration_${CIRCLE_WORKFLOW_ID:0:7})" 
             if grep -q "has been executed successfully." ~/backend-app/migrations_dump.txt
             then
               echo "------------- run migrations ------------"
@@ -348,8 +348,6 @@ jobs:
       # Lightweight Docker image 
       - image: cimg/base:stable 
     steps:
-      # Checkout code from git
-      - checkout
       - install_awscli
       - install_nodejs
       - run:
