@@ -56,10 +56,11 @@ commands:
           # Add when this will run
           when: on_fail
           command: |
-            if grep -q "has been executed successfully." ~/project/backend-app/migrations_dump.txt
+            cd 
+            if grep -q "has been executed successfully." ~/backend-app/migrations_dump.txt
             then
               echo "------------- run migrations ------------"
-              cd ~/project/backend-app
+              cd ~/backend-app
               npm install
               npm run migration:revert
             fi
