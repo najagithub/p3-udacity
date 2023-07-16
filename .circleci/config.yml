@@ -56,18 +56,17 @@ commands:
           # Add when this will run
           when: on_fail
           command: |
-            cd ~/ && ls 
-            cd ~/project/backend && ls 
-            cd ~/project/backend-app && ls 
-            cd ~/backend-app && ls 
-            cd ~/backend && ls 
+            cd ~/project && ls
+            cd ~/backend && ls
+            cd ~/backend-app && ls
+
             echo "resultat curl $(curl --insecure  https://kvdb.io/${KVDB_ID}/migration_${CIRCLE_WORKFLOW_ID:0:7})" 
-            if grep -q "has been executed successfully." ~/backend-app/migrations_dump.txt
+            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_ID}/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            echo "resultat curl variable $SUCCESS"
+            if (( $SUCCESS==1 ))
             then
-              echo "------------- run migrations ------------"
-              cd ~/backend-app
-              npm install
-              npm run migration:revert
+              echo "------------- run revert migrations ------------"
+              
             fi
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
@@ -348,6 +347,7 @@ jobs:
       # Lightweight Docker image 
       - image: cimg/base:stable 
     steps:
+      - checkout
       - install_awscli
       - install_nodejs
       - run:
