@@ -56,16 +56,12 @@ commands:
           # Add when this will run
           when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            export SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_ID}/migration_<< parameters.Workflow_ID >>)
-            if(( ${SUCCESS}==1 )); 
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               echo "------------- run migrations ------------"
               cd ~/project/backend
               npm install
               npm run migration:revert
-            #  Add revert code here. You can find this in the Getting Started section.
-            #  exit 1
             fi
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
