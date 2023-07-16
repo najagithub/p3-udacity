@@ -51,12 +51,17 @@ commands:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}   
     steps:
+      - checkout
       - run:
           name: Revert migrations
           # Add when this will run
           when: on_fail
           command: |
-            cd 
+            cd ~/ && ls 
+            cd ~/project/backend && ls 
+            cd ~/project/backend-app && ls 
+            cd ~/backend-app && ls 
+            cd ~/backend && ls 
             if grep -q "has been executed successfully." ~/backend-app/migrations_dump.txt
             then
               echo "------------- run migrations ------------"
