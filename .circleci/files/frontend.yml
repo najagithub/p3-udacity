@@ -11,8 +11,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub "udapeople-${ID}"
-      PublicAccessBlockConfiguration:
-        BlockPublicPolicy: false
+      AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
@@ -27,7 +26,7 @@ Resources:
           Effect: Allow
           Principal: '*'
           Action: s3:GetObject
-          Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]
+          Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', '/*']]
 
 Outputs:
   WebsiteURL:
